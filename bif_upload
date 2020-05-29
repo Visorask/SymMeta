@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+new_loc="/mnt/unionfs/bif"
+local="/mnt/local/bif"
+
+readarray -t array < <(fd -e bif index-sd '/opt/plex/Library/Application Support/Plex Media Server/Media/')
+
+for index in "${array[@]}"; do
+  gai=$(echo $index | grep -oP '(?<=/localhost/).*(?=/Contents/)')
+    echo "$(date "+%d.%m.%Y %T") INFO: Creating directory $local/Media/localhost/$gai/Contents/Indexes/"
+      mkdir -p "$local/Media/localhost/$gai/Contents/Indexes/"
+    echo "$(date "+%d.%m.%Y %T") INFO: Moving file from $index to $local/Media/localhost/$gai/Contents/Indexes/"
+      mv "$index" "$local/Media/localhost/$gai/Contents/Indexes/"
+done
+
+echo "$(date "+%d.%m.%Y %T") INFO: Cloudplow is now uploading these files."
+  cloudplow upload
+echo "$(date "+%d.%m.%Y %T") INFO: Sleeping for 1 minute to let the mount polling catch up."
+  sleep 1m
+
+for index in "${array[@]}"; do
+  gai=$(echo $index | grep -oP '(?<=/localhost/).*(?=/Contents/)')
+    echo "$(date "+%d.%m.%Y %T") INFO: Creating symlink from $new_loc/Media/localhost/$gai/Contents/Indexes/index-sd.bif $index"
+      ln -s "$new_loc/Media/localhost/$gai/Contents/Indexes/index-sd.bif" "$index"
+done
