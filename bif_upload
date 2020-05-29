@@ -15,7 +15,7 @@ readarray -t bifArray < <(fd -e bif index-sd "$plex_dir")
 }
 
 moveCreate() {
-for index in "${bif_array[@]}"; do
+for index in "${bifArray[@]}"; do
   gai=$(echo $index | grep -oP '(?<=/localhost/).*(?=/Contents/)')
     echo "$(date "+%d.%m.%Y %T") INFO: Creating directory $local/Media/localhost/$gai/Contents/Indexes/"
       mkdir -p "$local/Media/localhost/$gai/Contents/Indexes/"
