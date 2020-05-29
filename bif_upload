@@ -11,7 +11,7 @@ plex_dir="/opt/plex/Library/Application Support/Plex Media Server/Media/"
 ### Start Functions ###
 
 arrayRead() {
-readarray -t bif_array < <(fd -e bif index-sd "$plex_dir")
+readarray -t bifArray < <(fd -e bif index-sd "$plex_dir")
 }
 
 moveCreate() {
@@ -32,7 +32,7 @@ echo "$(date "+%d.%m.%Y %T") INFO: Sleeping for 1 minute to let the mount pollin
 }
 
 symlinkCreate() {
-for index in "${array[@]}"; do
+for index in "${bifAarray[@]}"; do
   gai=$(echo $index | grep -oP '(?<=/localhost/).*(?=/Contents/)')
     echo "$(date "+%d.%m.%Y %T") INFO: Creating symlink from $new_loc/Media/localhost/$gai/Contents/Indexes/index-sd.bif $index"
       ln -s "$new_loc/Media/localhost/$gai/Contents/Indexes/index-sd.bif" "$index"
