@@ -5,20 +5,21 @@
 
 ### Main Variables ###
 
-new_loc="/mnt/unionfs/bif"
-local="/mnt/local/bif"
-plex_dir="/opt/plex/Library/Application Support/Plex Media Server/Media/"
+. 
+create_variables config.yml
 
 ### End Variables ###
 
 ### Start Functions ###
 
+echo "$(date "+%d.%m.%Y %T") INFO: *** Starting script. ***
+
 arrayRead() {
-readarray -t bifArray < <(fd -e bif index-sd "$plex_dir")
+readarray -t bifArray < <(fd -e bif index-sd "$dir_plex")
 }
 
 checkExist() {
-if [ ${#bif_array[@]} -eq 0 ]; then
+if [ ${#bifArray[@]} -eq 0 ]; then
   echo "$(date "+%d.%m.%Y %T") INFO: There are ${#bif_array[@]} index-sd.bif files currently. Exiting script."
   exit 1
 else
@@ -29,10 +30,10 @@ fi
 moveCreate() {
 for index in "${bifArray[@]}"; do
   gai=$(echo $index | grep -oP '(?<=/localhost/).*(?=/Contents/)')
-    echo "$(date "+%d.%m.%Y %T") INFO: Creating directory $local/Media/localhost/$gai/Contents/Indexes/"
-      mkdir -p "$local/Media/localhost/$gai/Contents/Indexes/"
-    echo "$(date "+%d.%m.%Y %T") INFO: Moving file from $index to $local/Media/localhost/$gai/Contents/Indexes/"
-      mv "$index" "$local/Media/localhost/$gai/Contents/Indexes/"
+    echo "$(date "+%d.%m.%Y %T") INFO: Creating directory $dir_local/Media/localhost/$gai/Contents/Indexes/"
+      mkdir -p "$dir_local/Media/localhost/$gai/Contents/Indexes/"
+    echo "$(date "+%d.%m.%Y %T") INFO: Moving file from $index to $dir_local/Media/localhost/$gai/Contents/Indexes/"
+      mv "$index" "$dir_local/Media/localhost/$gai/Contents/Indexes/"
 done
 }
 
@@ -46,8 +47,8 @@ echo "$(date "+%d.%m.%Y %T") INFO: Sleeping for 1 minute to let the mount pollin
 symlinkCreate() {
 for index in "${bifAarray[@]}"; do
   gai=$(echo $index | grep -oP '(?<=/localhost/).*(?=/Contents/)')
-    echo "$(date "+%d.%m.%Y %T") INFO: Creating symlink from $new_loc/Media/localhost/$gai/Contents/Indexes/index-sd.bif $index"
-      ln -s "$new_loc/Media/localhost/$gai/Contents/Indexes/index-sd.bif" "$index"
+    echo "$(date "+%d.%m.%Y %T") INFO: Creating symlink from $dir_newloc/Media/localhost/$gai/Contents/Indexes/index-sd.bif to $index."
+      ln -s "$dir_newloc/Media/localhost/$gai/Contents/Indexes/index-sd.bif" "$index"
 done
 }
 
