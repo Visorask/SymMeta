@@ -2,8 +2,9 @@
 
 new_loc="/mnt/unionfs/bif"
 local="/mnt/local/bif"
+plex_dir="/opt/plex/Library/Application Support/Plex Media Server/Media/"
 
-readarray -t array < <(fd -e bif index-sd '/opt/plex/Library/Application Support/Plex Media Server/Media/')
+readarray -t array < <(fd -e bif index-sd "$plex_dir")
 
 for index in "${array[@]}"; do
   gai=$(echo $index | grep -oP '(?<=/localhost/).*(?=/Contents/)')
