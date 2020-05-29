@@ -40,7 +40,6 @@ else
 fi
 }
 
-
 Detect if cloudplow is installed.
 
 cloudplowDetect() {
