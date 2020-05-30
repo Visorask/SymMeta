@@ -23,11 +23,11 @@ Enter my script!
 ## Installation
 1. `cd /opt`
 
-2. `git clone https://github.com/Visorask/metasym.git`
+2. `git clone https://github.com/Visorask/MetaSym.git`
 
 3. `nano config.yml` Edit these settings as needed. 
 
-4. `cd /opt/metasym && chmod +x metasym`
+4. `cd /opt/MetaSym && chmod +x metasym`
 
 5. Enjoy!
 
