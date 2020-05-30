@@ -28,7 +28,7 @@ fi
 # Detect if cloudplow is installed.
 cloudplowDetect() {
 if [[ ! -d "/opt/cloudplow" ]]; then
-  log_error "Cloudplow is necessary for bif_upload. You can find the release here: https://github.com/l3uddz/cloudplow#installation"
+  log_error "Cloudplow is necessary for metasym. You can find the release here: https://github.com/l3uddz/cloudplow#installation"
   exit 2
 fi
 }
