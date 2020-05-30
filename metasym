@@ -1,0 +1,87 @@
+#!/usr/bin/env bash
+
+# Exit codes
+# 1 = Script cancelled due to no files.
+# 2 = Program no tinstalled.
+
+#+++Main Variables+++#
+
+source stdlib
+cf="config.yml"
+st="--stripComments"
+
+#---End Variables---#
+
+#+++Start Functions+++#
+
+# Detect if fd is installed.
+fdDetect() {
+if [[ ! -x "/usr/bin/fd" ]]; then
+   VERSION=$(curl -s "https://github.com/sharkdp/fd/releases/latest" | grep -oP '(?<=tag/v).*' | cut -d'"' -f1)
+   curl -L https://github.com/sharkdp/fd/releases/download/v"$VERSION"/fd_"$VERSION"_amd64.deb
+   sudo dpkg -i fd_"$VERSION"_amd64.deb
+   FDVERS=$(fd -V)
+   log_info "$FDVERS is now installed."
+fi
+}
+
+# Detect if cloudplow is installed.
+cloudplowDetect() {
+if [[ ! -d "/opt/cloudplow" ]]; then
+  log_error "Cloudplow is necessary for bif_upload. You can find the release here: https://github.com/l3uddz/cloudplow#installation"
+  exit 2
+fi
+}
+
+arrayRead() {
+readarray -t bifArray < <(fd -e bif index-sd "$(yyq r $cf $st dir.plex)")
+}
+
+checkExist() {
+if [ ${#bifArray[@]} -eq 0 ]; then
+  log_info "There are ${#bifArray[@]} index-sd.bif files currently. Exiting script."
+  exit 1
+else
+  log_info "There are currently ${#bifArray[@]} index-sd.bif files. Moving to next step."
+fi
+}
+
+moveCreate() {
+for index in "${bifArray[@]}"; do
+  gai=$(echo "$index" | grep -oP '(?<=/localhost/).*(?=/Contents/)')
+    log_info "Creating directory $(yyq r $cf dir.local)/Media/localhost/$gai/Contents/Indexes/"
+      mkdir -p "$(yyq r $cf dir.local)/Media/localhost/$gai/Contents/Indexes/"
+    log_info "Moving file from $index to $(yyq r $cf dir.local)/Media/localhost/$gai/Contents/Indexes/"
+      mv "$index" "$(yyq r $cf dir.local)/Media/localhost/$gai/Contents/Indexes/"
+done
+}
+
+uploadFile() {
+log_info "Cloudplow is now uploading these files."
+  cloudplow upload
+log_info "Sleeping for 1 minute to let the mount polling catch up."
+  sleep 1m
+}
+
+symlinkCreate() {
+for index in "${bifArray[@]}"; do
+  gai=$(echo "$index" | grep -oP '(?<=/localhost/).*(?=/Contents/)')
+    log_info "Creating symlink from $(yyq r $cf dir.newloc)/Media/localhost/$gai/Contents/Indexes/index-sd.bif to $index."
+      ln -s "$(yyq r $cf remote)/Media/localhost/$gai/Contents/Indexes/index-sd.bif" "$index"
+done
+}
+
+#---End Functions---#
+
+#+++Run Script+++#
+fdDetect
+cloudplowDetect
+log_info "*** [Starting script.] ***"
+arrayRead
+checkExist
+moveCreate
+uploadFile
+symlinkCreate
+log_info "*** [Script is now completed.] ***"
+
+#---End Script---#
