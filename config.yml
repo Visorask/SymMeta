@@ -1,0 +1,4 @@
+dir:
+  newloc: "/mnt/unionfs/bif"
+  local: "/mnt/local/bif"
+  plex: "/opt/plex/Library/Application Support/Plex Media Server/Media/"
