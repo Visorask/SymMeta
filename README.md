@@ -1,4 +1,4 @@
-# MetaSym
+# SymMeta
 
 For uploading of various metadata with Plex into GDrive/Teamdrives.
 
