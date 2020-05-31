@@ -25,10 +25,23 @@ if [[ ! -x "/usr/bin/fd" ]]; then
 fi
 }
 
+# Detect if yyq is installed
+yyqDetect() {
+if [[ ! -x "/usr/local/bin/yyq" ]]; then
+  log_info "Installing yyq as it is needed for this script."
+  cmd=$(curl -s https://api.github.com/repos/mikefarah/yq/releases/latest | jq -r ".assets[] | select(.name | test(\"yq_linux_amd64\")) | .browser_download_url")
+  sudo curl -L -O "$cmd"
+  sudo mv yq_linux_amd64 "/usr/local/bin/yyq"
+  sudo chmod 775 "/usr/local/bin/yyq"
+  sudo chown root:root "/usr/local/bin/yyq"
+  log_info "$(yyq --version) is now installed."
+fi
+}
+
 # Detect if cloudplow is installed.
 cloudplowDetect() {
 if [[ ! -d "$(yyq r $cf $st dir.cloudplow)" ]]; then
-  log_error "Cloudplow is necessary for metasym. You can find the release here: https://github.com/l3uddz/cloudplow#installation"
+  log_error "Cloudplow is necessary for symmeta. You can find the release here: https://github.com/l3uddz/cloudplow#installation"
   exit 2
 fi
 }
@@ -94,6 +107,7 @@ done
 #+++Run Script+++#
 fdDetect
 cloudplowDetect
+yyqDetect
 log_info "*** [Starting script.] ***"
 arrayRead
 rcloneCheckFolder
