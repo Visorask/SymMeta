@@ -37,6 +37,14 @@ arrayRead() {
 readarray -t bifArray < <(fd -e bif index-sd "$(yyq r $cf $st dir.plex)")
 }
 
+rcloneCheckFolder() {
+if [[ -d "$(yyq r $cf $st dir.newloc)" ]]; then
+  log_info "Your bif folder exists where it needs to. Moving to next step."
+else
+  log_info "Creating bif folder under $(yyq r $cf $st rclone.remote):bif"
+  rclone mkdir "$(yyq r $cf $st rclone.remote)":bif
+}
+
 checkExist() {
 if [ ${#bifArray[@]} -eq 0 ]; then
   log_info "There are ${#bifArray[@]} index-sd.bif files currently. Exiting script."
@@ -67,7 +75,7 @@ symlinkCreate() {
 for index in "${bifArray[@]}"; do
   gai=$(echo "$index" | grep -oP '(?<=/localhost/).*(?=/Contents/)')
     log_info "Creating symlink from $(yyq r $cf dir.newloc)/Media/localhost/$gai/Contents/Indexes/index-sd.bif to $index."
-      ln -s "$(yyq r $cf remote)/Media/localhost/$gai/Contents/Indexes/index-sd.bif" "$index"
+      ln -s "$(yyq r $cf dir.newloc)/Media/localhost/$gai/Contents/Indexes/index-sd.bif" "$index"
 done
 }
 
@@ -78,6 +86,7 @@ fdDetect
 cloudplowDetect
 log_info "*** [Starting script.] ***"
 arrayRead
+rcloneCheckFolder
 checkExist
 moveCreate
 uploadFile
