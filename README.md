@@ -44,7 +44,25 @@ Enter my script!
 
 ---
 
-## I will add more instructions soon. This is initial release.
+## How to use
+
+1. First thing is you will probably want to create a specific teamdrive or use gdrive for this.
+2. You will then add that rclone remote to the config file. The script will generate this folder automatically for you, as long as it's pointed at the right rclone remote.
+3. At this point you should wait a minute for rclone backend to catch up and then do `cd /mnt/unionfs/` (or wherever you have your mergerfs folder) and then do `ls` to see if there is a folder called `bif` there. If there is not you need to try again.
+4. Also check under `cd /mnt/local` and `ls` and see if there is a bif folder there as well.
+5. Once you have the folder showing up under `/mnt/unionfs` then you can get started.
+6. You will then enable `Settings -> Library -> Generate video preview thumbnails` And set it to your preference of `as a scheduled task` or `as a scheduled task and when media is added`.
+7. You can then go `Plex Home -> <Target Library> -> Manage Library -> Edit -> Advanced -> Enable video preview thumbnails.`
+8. Then `Plex Home -> <Target Library> -> Manage Library -> Analyze` 
+  - This sometimes takes a while to start so don't get discouraged or frustrated. Refresh the page a couple of times and when you see the dashboard start spinning and it says Generating video preview thumbnails, you should be good to go.
+9. At this point you can give it a while to create some .bif file before activating the script.
+10. When you feel enough time has passed then you can `cd /opt/SymMeta` and run the command `./symmeta` and you should be getting output. 
+11. At this point this should be everything you need to do. 
+
+---
+
+## I will add crontab instructions soon.
+
 
 ---
 
