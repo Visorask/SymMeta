@@ -3,3 +3,5 @@ dir:
   local: "/mnt/local/bif"
   plex: "/opt/plex/Library/Application Support/Plex Media Server/Media/"
   cloudplow: "/opt/cloudplow"
+rclone:
+  remote: "remote"     #Do not add a colon after the name of your remote. The script handles this.
