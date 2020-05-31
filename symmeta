@@ -39,15 +39,24 @@ readarray -t bifArray < <(fd -e bif index-sd "$(yyq r $cf $st dir.plex)")
 
 rcloneCheckFolder() {
 if [[ -d "$(yyq r $cf $st dir.newloc)" ]]; then
-  log_info "Your bif folder exists where it needs to. Moving to next step."
+  temp="$(yyq r $cf $st rclone.remote)"
+  log_info "Your rclone bif folder exists under ${temp%:*}/bif = $(yyq r $cf $st dir.newloc). Moving to next step."
 else
-  log_info "Creating bif folder under $(yyq r $cf $st rclone.remote):bif"
+  log_warn "Creating rclone bif folder under ${temp%:*}/bif = $(yyq r $cf $st dir.newloc). Moving to next step"
   rclone mkdir "$(yyq r $cf $st rclone.remote):bif"
+fi
+
+if [[ -d "$(yyq r $cf $st dir.local)" ]]; then
+  temp="$(yyq r $cf $st dir.local)"
+  log_info "Your local bif folder exists under $(yyq r $cf $st dir.local). Moving to next step."
+else
+  log_warn "Creating local bif folder under $(yyq r $cf $st dir.local). Moving to next step."
+  mkdir -p "$(yyq r $cf $st dir.local)"
 fi
 }
 
 checkExist() {
-if [ ${#bifArray[@]} -eq 0 ]; then
+if [[ ${#bifArray[@]} -eq 0 ]]; then
   log_info "There are ${#bifArray[@]} index-sd.bif files currently. Exiting script."
   exit 1
 else
