@@ -34,11 +34,11 @@ Enter my script!
 ## Installation
 1. `cd /opt`
 
-2. `git clone https://github.com/Visorask/MetaSym.git`
+2. `git clone https://github.com/Visorask/SymMeta.git`
 
 3. `nano config.yml` Edit these settings as needed. 
 
-4. `cd /opt/MetaSym && chmod +x metasym`
+4. `cd /opt/SymMeta && chmod +x symmeta`
 
 5. Enjoy!
 
