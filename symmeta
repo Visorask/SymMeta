@@ -18,7 +18,7 @@ st="--stripComments"
 fdDetect() {
 if [[ ! -x "/usr/bin/fd" ]]; then
    VERSION=$(curl -s "https://github.com/sharkdp/fd/releases/latest" | grep -oP '(?<=tag/v).*' | cut -d'"' -f1)
-   curl -L https://github.com/sharkdp/fd/releases/download/v"$VERSION"/fd_"$VERSION"_amd64.deb
+   curl -L -O https://github.com/sharkdp/fd/releases/download/v"$VERSION"/fd_"$VERSION"_amd64.deb
    sudo dpkg -i fd_"$VERSION"_amd64.deb
    FDVERS=$(fd -V)
    log_info "$FDVERS is now installed."
