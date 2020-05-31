@@ -42,7 +42,8 @@ if [[ -d "$(yyq r $cf $st dir.newloc)" ]]; then
   log_info "Your bif folder exists where it needs to. Moving to next step."
 else
   log_info "Creating bif folder under $(yyq r $cf $st rclone.remote):bif"
-  rclone mkdir "$(yyq r $cf $st rclone.remote)":bif
+  rclone mkdir "$(yyq r $cf $st rclone.remote):bif"
+fi
 }
 
 checkExist() {
