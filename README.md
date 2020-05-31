@@ -20,14 +20,14 @@ Enter my script!
  4. yq: https://github.com/mikefarah/yq
    - If you have Cloudbox installed then you will already have this installed.
    - If you do not have Cloudbox you must follow the below steps to install it.
-   A. Install Instructions:
-     - Get current version of yq: `wget -qO- https://api.github.com/repos/mikefarah/yq/releases/latest | jq -r ".assets[] | select(.name | test(\"yq_linux_amd64\")) | .browser_download_url"`
-     - `sudo wget -o /usr/local/bin/ <insert above command result here>`
-     - `sudo mv /usr/local/bin/yq_linux_amd64 /usr/local/bin/yyq`
-     - `sudo chmod 775 /usr/local/bin/yyq`
-     - `sudo chown root:root /usr/local/bin/yyq`
-     - `yyq --version`
-   B. We rename this due to the fact that there is 2 other versions of yq out there that are named the same.
+     - Install Instructions:
+       - Get current version of yq: `wget -qO- https://api.github.com/repos/mikefarah/yq/releases/latest | jq -r ".assets[] | select(.name | test(\"yq_linux_amd64\")) | .browser_download_url"`
+       - `sudo wget -o /usr/local/bin/ <insert above command result here>`
+       - `sudo mv /usr/local/bin/yq_linux_amd64 /usr/local/bin/yyq`
+       - `sudo chmod 775 /usr/local/bin/yyq`
+       - `sudo chown root:root /usr/local/bin/yyq`
+       - `yyq --version`
+     - We rename this due to the fact that there is 2 other versions of yq out there that are named the same.
 
 ---
 
