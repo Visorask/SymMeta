@@ -44,7 +44,7 @@ cmd_yyq=$(curl -sL "https://api.github.com/repos/mikefarah/yq/releases/latest" |
 yyq_ver=$(curl -sL "https://api.github.com/repos/mikefarah/yq/releases/latest" | grep "yq_linux_amd64" | grep "browser_download_url" | cut -d'/' -f8)
 if [[ ! -x "/usr/local/bin/yyq" ]]; then
   log_info "Installing yyq as it is needed for this script."
-    sudo curl -LO "$cmd_yyq"
+    curl -LO "$cmd_yyq"
     sudo mv yq_linux_amd64 "/usr/local/bin/yyq"
     sudo chmod 775 "/usr/local/bin/yyq"
     sudo chown root:root "/usr/local/bin/yyq"
@@ -56,7 +56,7 @@ if [[ "$(yyq --version)" != "$yyq_ver" ]]; then
 else
   log_info "Updating $(yyq --version) to $yyq_ver."
     sudo rm -rf "usr/local/bin/yyq"
-    sudo curl -LO "$cmd_yyq"
+    curl -LO "$cmd_yyq"
     sudo mv yq_linux_amd64 "/usr/local/bin/yyq"
     sudo chmod 775 "/usr/local/bin/yyq"
     sudo chown root:root "/usr/local/bin/yyq"
