@@ -25,7 +25,7 @@ Enter my script!
  1. fd: https://github.com/sharkdp/fd
    - The script has a built-in check to download this.
  2. Cloudplow: https://github.com/l3uddz/cloudplow
-   - The script will do a check to see if this is installed but youw ill need to install this yourself as there are a myriad of config settings.
+   - The script will do a check to see if this is installed but you will need to install this yourself as there are a myriad of config settings.
    - I chose cloudplow because it's already a complete rclone wrapper and I am lazy. Thanks l3uddz!!
  3. rclone: ```curl https://rclone.org/install.sh | sudo bash```
  4. yq: https://github.com/mikefarah/yq 
