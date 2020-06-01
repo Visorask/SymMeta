@@ -1,15 +1,16 @@
-###
-### stdlib.sh - foundation library for Bash scripts
-###             Need Bash version 4.3 or above - see http://tiswww.case.edu/php/chet/bash/NEWS
-###
+#############################
+###                       ###
+###        Logging        ###
+###                       ### 
+#############################
+
+### stdlib - foundation library for Bash scripts | Need Bash version 4.3 or above - see http://tiswww.case.edu/php/chet/bash/NEWS
 ### Areas covered:
 ###     - PATH manipulation
 ###     - logging
 ###     - error handling
-###
 
 ################################################# INITIALIZATION #######################################################
-
 #
 # make sure we do nothing in case the library is sourced more than once in the same shell
 #
@@ -24,9 +25,7 @@ __stdlib_init__() {
 
     # call future init functions here
 }
-
 ################################################# LIBRARY IMPORTER #####################################################
-
 #
 # import: source a library from $BASE_HOME
 # Example:
@@ -51,7 +50,6 @@ import() {
 }
 
 ################################################# PATH MANIPULATION ####################################################
-
 # add a new directory to $PATH
 add_to_path() {
     local dir re prepend=0 opt strict=1
@@ -87,7 +85,6 @@ print_path() {
 }
 
 #################################################### LOGGING ###########################################################
-
 __log_init__() {
     if [[ -t 1 ]]; then
         # colors for logging in interactive mode
@@ -248,7 +245,6 @@ print_tty() {
 }
 
 ################################################## ERROR HANDLING ######################################################
-
 dump_trace() {
     local frame=0 line func source n=0
     while caller "$frame"; do
@@ -353,3 +349,64 @@ wait_for_enter() {
 #################################################### END OF FUNCTIONS ##################################################
 
 __stdlib_init__
+
+#############################
+###                       ###
+###      Requirements     ###
+###                       ### 
+#############################
+
+### Required Variables ###
+
+cf="config.yml"
+st="--stripComments"
+
+### End Required Variables ###
+
+### Detect if fd is installed. ###
+fdDetect() {
+cmd_fd=$(curl -sL "https://api.github.com/repos/sharkdp/fd/releases/latest" | grep "fd_.*_amd64" | grep "browser_download_url" | cut -d'"' -f4)
+fd_ver=$(curl -sL "https://api.github.com/repos/sharkdp/fd/releases/latest" | grep "fd_.*_amd64" | grep "browser_download_url" | cut -d'/' -f8 | cut -d'v' -f2)
+if [[ ! -x "/usr/bin/fd" ]]; then
+  log_info "Installing fd as it is needed for this script."
+    curl -LO "$cmd_fd"
+    sudo dpkg -i fd_"$fd_ver"_amd64.deb
+    rm -rf fd_"$fd_ver"_amd64.deb
+  log_info "$(fd -V) is now installed."
+fi
+if [[ "$(fd -V)" != "$fd_ver" ]]; then
+  log_info "fd is already at the current version."
+else
+  log_info "Updating $(fd-V)" to "$fd_ver".
+    sudo dpkg -r fd
+    curl -LO "$cmd_fd"
+    sudo dpkg -i fd_"$fd_ver"_amd64.deb
+    rm -rf fd_"$fd_ver"_amd64.deb
+  log_info "$(fd -V) is updated."
+fi
+}
+
+### Detect if yyq is installed
+yyqDetect() {
+cmd_yyq=$(curl -sL "https://api.github.com/repos/mikefarah/yq/releases/latest" | grep "yq_linux_amd64" | grep "browser_download_url" | cut -d'"' -f4)
+yyq_ver=$(curl -sL "https://api.github.com/repos/mikefarah/yq/releases/latest" | grep "yq_linux_amd64" | grep "browser_download_url" | cut -d'/' -f8)
+if [[ ! -x "/usr/local/bin/yyq" ]]; then
+  log_info "Installing yyq as it is needed for this script."
+    curl -LO "$cmd_yyq"
+    sudo mv yq_linux_amd64 "/usr/local/bin/yyq"
+    sudo chmod 775 "/usr/local/bin/yyq"
+    sudo chown root:root "/usr/local/bin/yyq"
+  log_info "$(yyq --version) is now installed."
+fi
+if [[ "$(yyq --version)" != "$yyq_ver" ]]; then
+  log_info "yyq is already at the current version."
+else
+  log_info "Updating $(yyq --version) to $yyq_ver."
+    sudo rm -rf "usr/local/bin/yyq"
+    curl -LO "$cmd_yyq"
+    sudo mv yq_linux_amd64 "/usr/local/bin/yyq"
+    sudo chmod 775 "/usr/local/bin/yyq"
+    sudo chown root:root "/usr/local/bin/yyq"
+  log_info "$(yyq --version) is now updated."
+fi
+}
