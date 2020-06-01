@@ -4,6 +4,17 @@ For uploading of various metadata with Plex into GDrive/Teamdrives.
 
 "I am not a coder. I have barely know what I am doing. Use at your own risk!"
 
+## Changelog v1.0
+   - [Added] Script will now detect any dependencies it needs and download them.
+   - [Added] Script will detect if dependencies need an upgrade and will upgrade them.
+   - [Added] Script now uses a logging library that is more efficient and provides better information.
+   - [Added] Script is ran through shellcheck to verify it is the most current and updated logic and bash.
+
+### To-Do List
+   - Add better logging to a log file.
+   - Add apprise notifications.
+   - Add error handling when files for some reason to not upload.
+   - Other stuff I'm probably forgetting.
 
 ## What is it?
 This script was create for the purposes of creating .bif files, otherwise known as Video Preview Thumbnails in Plex. I enjoy having them but did not want to have to use terabytes of storage to do so.
