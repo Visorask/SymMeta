@@ -4,7 +4,11 @@ For uploading of various metadata with Plex into GDrive/Teamdrives.
 
 "I am not a coder. I have barely know what I am doing. Use at your own risk!"
 
-## Changelog v1.0
+## Changelog v1.1
+   - [Fix] Corrected an error in the script with an if logic operator that would cause the whole script to not function properly.
+   - [Fix] Corrected a visual bug where `fd-V` was changed to the proper `fd -V`.
+
+## [OLD] Changelog v1.0
    - [Added] Script will now detect any dependencies it needs and download them.
    - [Added] Script will detect if dependencies need an upgrade and will upgrade them.
    - [Added] Script now uses a logging library that is more efficient and provides better information.
