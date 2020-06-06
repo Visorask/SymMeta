@@ -31,6 +31,92 @@ Enter my script!
  2. Cloudplow: https://github.com/l3uddz/cloudplow
    - The script will do a check to see if this is installed but you will need to install this yourself as there are a myriad of config settings.
    - I chose cloudplow because it's already a complete rclone wrapper and I am lazy. Thanks l3uddz!!
+   - When utilizing cloudplow, below is an example config you can utilize.
+
+```
+{
+    "core": {
+        "dry_run": false,
+        "rclone_binary_path": "/usr/bin/rclone",
+        "rclone_config_path": "/home/<youruser>/.config/rclone/rclone.conf"
+    },
+    "hidden": {},
+    "notifications": {},
+    "nzbget": {
+        "enabled": false,
+        "url": "https://user:password@nzbget.domain.com"
+    },
+    "plex": {
+        "enabled": false,
+        "max_streams_before_throttle": 1,
+        "notifications": false,
+        "poll_interval": 60,
+        "rclone": {
+            "throttle_speeds": {
+                "1": "50M",
+                "2": "40M",
+                "3": "30M",
+                "4": "20M",
+                "5": "10M"
+            },
+            "url": "http://localhost:7949"
+        },
+        "token": "",
+        "url": "https://plex.domain.com"
+    },
+    "remotes": {
+        "<yourremote>": {
+            "hidden_remote": "",
+            "rclone_command": "move",
+            "rclone_excludes": [],
+            "rclone_extras": {
+                "--checkers": 16,
+                "--drive-chunk-size": "128M",
+                "--drive-stop-on-upload-limit": null,
+                "--low-level-retries": 2,
+                "--retries": 1,
+                "--skip-links": null,
+                "--stats": "60s",
+                "--transfers": 8,
+                "--user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.131 Safari/537.36",
+                "--verbose": 1
+            },
+            "rclone_sleeps": {
+                " 0/s,": {
+                    "count": 2400,
+                    "sleep": 25,
+                    "timeout": 120
+                },
+                "Failed to copy: googleapi: Error 403: User rate limit exceeded": {
+                    "count": 10,
+                    "sleep": 25,
+                    "timeout": 7200
+                }
+            },
+            "remove_empty_dir_depth": 2,
+            "sync_remote": "<yourremote>:/bif",
+            "upload_folder": "/mnt/local/bif",
+            "upload_remote": "<yourremote>:/bif"
+        }
+    },
+    "syncer": {},
+    "uploader": {
+        "<yourremote>": {
+            "check_interval": 30,
+            "exclude_open_files": true,
+            "max_size_gb": 1,
+            "opened_excludes": [
+                "/bif/"
+            ],
+            "service_account_path": "/your/path/here",
+            "size_excludes": [
+                "bif/*"
+            ]
+        }
+    }
+}
+```
+
  3. rclone: ```curl https://rclone.org/install.sh | sudo bash```
  4. yq: https://github.com/mikefarah/yq 
    - This is renamed to yyq as there are a couple variants out there with the same name.
