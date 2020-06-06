@@ -33,7 +33,7 @@ Enter my script!
    - I chose cloudplow because it's already a complete rclone wrapper and I am lazy. Thanks l3uddz!!
    - When utilizing cloudplow, below is an example config you can utilize.
 
-```
+```json
 {
     "core": {
         "dry_run": false,
