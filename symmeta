@@ -15,67 +15,80 @@ source library
 # Detect if cloudplow is installed.
 cloudplowDetect() {
 if [[ ! -d "$(yyq r $cf $st cloudplow.location)" ]]; then
-  log_error "Cloudplow is necessary for symmeta. You can find the release here: https://github.com/l3uddz/cloudplow#installation"
+  log_error "Cloudplow is necessary for symmeta. You can find the release here: https://github.com/l3uddz/cloudplow#installation" | tee -a "$(yyq r "$st" "$cf" log.log_file)"
   exit 2
 fi
 }
 
 arrayRead() {
-log_info "*** [Starting script.] ***"
+log_info "*** [Starting script.] ***" | tee -a "$(yyq r "$st" "$cf" log.log_file)"
 readarray -t bifArray < <(fd -e bif index-sd "$(yyq r $cf $st dir.plex)")
+}
+
+logCheck() {
+if [ ! -d "$(yyq r "$st" "$cf" log.log_dir)" ]; then 
+  mkdir -p "$(yyq r "$st" "$cf" log.log_dir)"
+fi
+if [ ! -f "$(yyq r "$st" "$cf" log.log_file)" ]; then 
+  touch "$(yyq r "$st" "$cf" log.log_file)"
+fi
+if [[ -f "$(yyq r "$st" "$cf" log.log_file)" ]]; then 
+  tail -n 150 "$(yyq r "$st" "$cf" log.log_file)" > tmp
+  mv tmp "$(yyq r "$st" "$cf" log.log_file)"
+fi
 }
 
 rcloneCheckFolder() {
 if [[ -d "$(yyq r $cf $st dir.newloc)" ]]; then
   temp="$(yyq r $cf $st rclone.remote)"
-  log_info "Your rclone bif folder exists under ${temp%:*}/bif = $(yyq r $cf $st dir.newloc). Moving to next step."
+  log_info "Your rclone bif folder exists under ${temp%:*}/bif = $(yyq r $cf $st dir.newloc). Moving to next step." | tee -a "$(yyq r "$st" "$cf" log.log_file)"
 else
-  log_warn "Creating rclone bif folder under ${temp%:*}/bif = $(yyq r $cf $st dir.newloc). Moving to next step"
+  log_warn "Creating rclone bif folder under ${temp%:*}/bif = $(yyq r $cf $st dir.newloc). Moving to next step" | tee -a "$(yyq r "$st" "$cf" log.log_file)"
   rclone mkdir "$(yyq r $cf $st rclone.remote):bif"
 fi
 
 if [[ -d "$(yyq r $cf $st dir.local)" ]]; then
   temp="$(yyq r $cf $st dir.local)"
   log_info "Your local bif folder exists under $(yyq r $cf $st dir.local). Moving to next step."
-else
-  log_warn "Creating local bif folder under $(yyq r $cf $st dir.local). Moving to next step."
+else | tee -a "$(yyq r "$st" "$cf" log.log_file)"
+  log_warn "Creating local bif folder under $(yyq r $cf $st dir.local). Moving to next step." | tee -a "$(yyq r "$st" "$cf" log.log_file)"
   mkdir -p "$(yyq r $cf $st dir.local)"
 fi
 }
 
 checkExist() {
 if [[ ${#bifArray[@]} -eq 0 ]]; then
-  log_info "There are ${#bifArray[@]} index-sd.bif files currently. Exiting script."
+  log_info "There are ${#bifArray[@]} index-sd.bif files currently. Exiting script." | tee -a "$(yyq r "$st" "$cf" log.log_file)"
   exit 1
 else
-  log_info "There are currently ${#bifArray[@]} index-sd.bif files. Moving to next step."
+  log_info "There are currently ${#bifArray[@]} index-sd.bif files. Moving to next step." | tee -a "$(yyq r "$st" "$cf" log.log_file)"
 fi
 }
 
 moveCreate() {
 for index in "${bifArray[@]}"; do
   gai=$(echo "$index" | grep -oP '(?<=/localhost/).*(?=/Contents/)')
-    log_info "Creating directory $(yyq r $cf dir.local)/Media/localhost/$gai/Contents/Indexes/"
+    log_info "Creating directory $(yyq r $cf dir.local)/Media/localhost/$gai/Contents/Indexes/" | tee -a "$(yyq r "$st" "$cf" log.log_file)"
       mkdir -p "$(yyq r $cf dir.local)/Media/localhost/$gai/Contents/Indexes/"
-    log_info "Moving file from $index to $(yyq r $cf dir.local)/Media/localhost/$gai/Contents/Indexes/"
+    log_info "Moving file from $index to $(yyq r $cf dir.local)/Media/localhost/$gai/Contents/Indexes/" | tee -a "$(yyq r "$st" "$cf" log.log_file)"
       mv "$index" "$(yyq r $cf dir.local)/Media/localhost/$gai/Contents/Indexes/"
 done
 }
 
 uploadFile() {
-log_info "Cloudplow is now uploading these files."
-  cloudplow --config $(yyq r $cf cloudplow.config) upload
-log_info "Sleeping for 1 minute to let the mount polling catch up."
+log_info "Cloudplow is now uploading these files." | tee -a "$(yyq r "$st" "$cf" log.log_file)"
+  cloudplow --config $(yyq r $cf cloudplow.config) upload 
+log_info "Sleeping for 1 minute to let the mount polling catch up." | tee -a "$(yyq r "$st" "$cf" log.log_file)"
   sleep 1m
 }
 
 symlinkCreate() {
 for index in "${bifArray[@]}"; do
   gai=$(echo "$index" | grep -oP '(?<=/localhost/).*(?=/Contents/)')
-    log_info "Creating symlink from $(yyq r $cf dir.newloc)/Media/localhost/$gai/Contents/Indexes/index-sd.bif to $index."
+    log_info "Creating symlink from $(yyq r $cf dir.newloc)/Media/localhost/$gai/Contents/Indexes/index-sd.bif to $index." | tee -a "$(yyq r "$st" "$cf" log.log_file)"
       ln -s "$(yyq r $cf dir.newloc)/Media/localhost/$gai/Contents/Indexes/index-sd.bif" "$index"
 done
-log_info "*** [Script is now completed.] ***"
+log_info "*** [Script is now completed.] ***" | tee -a "$(yyq r "$st" "$cf" log.log_file)"
 }
 
 #---End Functions---#

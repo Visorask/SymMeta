@@ -7,3 +7,6 @@ rclone:
 cloudplow: 
   location: "/opt/cloudplow"                                                    # Folder location of cloudplow.
   config: "/opt/cloudplow/config.json"                                          # Default config location. Change this if you want a different one.
+log:
+  log_dir: "/opt/SymMeta/logs"                                                  # Default log location.
+  log_file: "/opt/SymMeta/logs/symmeta.log"                                     # Default log name.
