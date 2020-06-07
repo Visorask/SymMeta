@@ -49,8 +49,8 @@ fi
 
 if [[ -d "$(yyq r $cf $st dir.local)" ]]; then
   temp="$(yyq r $cf $st dir.local)"
-  log_info "Your local bif folder exists under $(yyq r $cf $st dir.local). Moving to next step."
-else | tee -a "$(yyq r "$st" "$cf" log.log_file)"
+  log_info "Your local bif folder exists under $(yyq r $cf $st dir.local). Moving to next step." | tee -a "$(yyq r "$st" "$cf" log.log_file)"
+else 
   log_warn "Creating local bif folder under $(yyq r $cf $st dir.local). Moving to next step." | tee -a "$(yyq r "$st" "$cf" log.log_file)"
   mkdir -p "$(yyq r $cf $st dir.local)"
 fi
@@ -99,6 +99,7 @@ fdDetect
 yyqDetect
 cloudplowDetect
 
+logCheck
 arrayRead
 rcloneCheckFolder
 checkExist
