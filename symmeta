@@ -14,13 +14,14 @@ source library
 
 # Detect if cloudplow is installed.
 cloudplowDetect() {
-if [[ ! -d "$(yyq r $cf $st dir.cloudplow)" ]]; then
+if [[ ! -d "$(yyq r $cf $st cloudplow.location)" ]]; then
   log_error "Cloudplow is necessary for symmeta. You can find the release here: https://github.com/l3uddz/cloudplow#installation"
   exit 2
 fi
 }
 
 arrayRead() {
+log_info "*** [Starting script.] ***"
 readarray -t bifArray < <(fd -e bif index-sd "$(yyq r $cf $st dir.plex)")
 }
 
@@ -63,7 +64,7 @@ done
 
 uploadFile() {
 log_info "Cloudplow is now uploading these files."
-  cloudplow upload
+  cloudplow --config $(yyq r $cf cloudplow.config) upload
 log_info "Sleeping for 1 minute to let the mount polling catch up."
   sleep 1m
 }
@@ -74,6 +75,7 @@ for index in "${bifArray[@]}"; do
     log_info "Creating symlink from $(yyq r $cf dir.newloc)/Media/localhost/$gai/Contents/Indexes/index-sd.bif to $index."
       ln -s "$(yyq r $cf dir.newloc)/Media/localhost/$gai/Contents/Indexes/index-sd.bif" "$index"
 done
+log_info "*** [Script is now completed.] ***"
 }
 
 #---End Functions---#
@@ -84,13 +86,11 @@ fdDetect
 yyqDetect
 cloudplowDetect
 
-log_info "*** [Starting script.] ***"
 arrayRead
 rcloneCheckFolder
 checkExist
 moveCreate
 uploadFile
 symlinkCreate
-log_info "*** [Script is now completed.] ***"
 
 #---End Script---#

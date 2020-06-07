@@ -2,6 +2,8 @@ dir:
   newloc: "/mnt/unionfs/bif"                                                    # Location of the .bif files on your google cloud.
   local: "/mnt/local/bif"                                                       # Location of the local folder where your files will temporarily stay until cloudplow uploads them.
   plex: "/opt/plex/Library/Application Support/Plex Media Server/Media/"        # Location of plex metadata. Only change "/opt/plex/" portion if your library is different like "/var/"
-  cloudplow: "/opt/cloudplow"                                                   # Folder location of cloudplow.
 rclone:
-  remote: "remote"                                                              #Do not add a colon after the name of your remote. The script handles this.
+  remote: "remote"                                                              # Do not add a colon after the name of your remote. The script handles this.
+cloudplow: 
+  location: "/opt/cloudplow"                                                    # Folder location of cloudplow.
+  config: "/opt/cloudplow/config.json"                                          # Default config location. Change this if you want a different one.
