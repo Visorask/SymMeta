@@ -4,7 +4,10 @@ For uploading of various metadata with Plex into GDrive/Teamdrives.
 
 "I am not a coder. I have barely know what I am doing. Use at your own risk!"
 
-## Changelog v1.1
+## [NEW] Changelog v1.2
+   - [Fix] Fixed fd to only look for files, and not symlinks, when creating array at beginning of script. (Thanks for report Soulplayer)
+
+## [OLD] Changelog v1.1
    - [Fix] Corrected an error in the script with an if logic operator that would cause the whole script to not function properly.
    - [Fix] Corrected a visual bug where `fd-V` was changed to the proper `fd -V`.
 
