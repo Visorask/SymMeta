@@ -22,7 +22,7 @@ fi
 
 arrayRead() {
 log_info "*** [Starting script.] ***" | tee -a "$(yyq r "$st" "$cf" log.log_file)"
-readarray -t bifArray < <(fd -e bif index-sd "$(yyq r $cf $st dir.plex)")
+readarray -t bifArray < <(fd -e bif index-sd -t f "$(yyq r $cf $st dir.plex)")
 }
 
 logCheck() {
@@ -46,7 +46,6 @@ else
   log_warn "Creating rclone bif folder under ${temp%:*}/bif = $(yyq r $cf $st dir.newloc). Moving to next step" | tee -a "$(yyq r "$st" "$cf" log.log_file)"
   rclone mkdir "$(yyq r $cf $st rclone.remote):bif"
 fi
-
 if [[ -d "$(yyq r $cf $st dir.local)" ]]; then
   temp="$(yyq r $cf $st dir.local)"
   log_info "Your local bif folder exists under $(yyq r $cf $st dir.local). Moving to next step." | tee -a "$(yyq r "$st" "$cf" log.log_file)"
